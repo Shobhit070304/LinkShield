@@ -5,13 +5,12 @@ import { useNavigate } from "react-router-dom";
 function ProtectedRoute({ children }) {
   const { userData } = useContext(UserDataContext);
   const navigate = useNavigate();
+  const userToken = localStorage.getItem("token");
   useEffect(() => {
-    if (!userData) {
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+    if (!userToken) {
+      navigate("/login");
     }
-  }, [userData]);
+  }, [userToken, navigate]);
   return (
     <div>
       {userData ? (

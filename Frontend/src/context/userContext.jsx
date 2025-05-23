@@ -4,7 +4,7 @@ import React, { createContext, useEffect } from "react";
 export const UserDataContext = createContext();
 function userContext({ children }) {
   const [userData, setUserData] = React.useState({});
-  const userToken = localStorage.getItem("Token");
+  const userToken = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchUserData = async () => {

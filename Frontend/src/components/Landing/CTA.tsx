@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CTA = () => {
   return (
@@ -20,7 +21,7 @@ const CTA = () => {
             </div>
             <div className="flex-shrink-0">
               <button className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white px-6 py-3 rounded-lg text-lg font-medium transition-all inline-flex items-center group">
-                <a href="#feature">Get Started</a>
+                <Link to="/home">Get Started</Link>
                 <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>

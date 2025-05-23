@@ -6,10 +6,15 @@ import { UserDataContext } from '../../context/userContext';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
   const { userData, setUserData } = useContext(UserDataContext);
-  console.log(userData);
+
+
+
   const navigate = useNavigate();
+
   useEffect(() => {
+    setToken(localStorage.getItem('token'));
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
@@ -20,8 +25,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setUserData(null);
-    navigate("/")
+    setToken(null);
   };
 
   return (
@@ -41,11 +45,11 @@ const Header = () => {
           </div>
 
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#feature" className="text-gray-200 hover:text-white transition-colors">Features</a>
+            <Link to="/home" className="text-gray-200 hover:text-white transition-colors">Try it now!</Link>
             <a href="#" className="text-gray-200 hover:text-white transition-colors">About</a>
-            {!userData && (
+            {!token && (
               <div className='flex gap-2'>
-                <Link to="/signup" className="bg-black border-1 hover:bg-white hover:text-black text-white px-4 py-2 rounded-lg transition-colors">
+                <Link to="/signup" className="bg-white border-1 hover:bg-black hover:text-white text-black px-4 py-2 rounded-lg transition-colors">
                   SignUp
                 </Link>
                 <Link to="/login" className="bg-white border-1 hover:bg-black hover:text-white text-black px-4 py-2 rounded-lg transition-colors">
@@ -53,7 +57,7 @@ const Header = () => {
                 </Link>
               </div>
             )}
-            {userData && userData !== undefined && (
+            {token && (
               <Link to="/" onClick={handleLogout} className="bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg transition-colors">
                 Logout
               </Link>
