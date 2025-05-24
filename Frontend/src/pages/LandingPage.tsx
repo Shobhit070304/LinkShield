@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Layout/Header';
 import Hero from '../components/Landing/Hero';
 import Features from '../components/Landing/Features';
@@ -6,8 +6,10 @@ import CTA from '../components/Landing/CTA';
 import Footer from '../components/Layout/Footer';
 import Banner from '../components/Banner';
 import { Toaster } from 'react-hot-toast';
+import Home from './Home';
 
 const LandingPage = () => {
+
   return (
     <div className="bg-black min-h-screen text-white">
       <Toaster position="top-center" />

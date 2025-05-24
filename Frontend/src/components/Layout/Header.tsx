@@ -37,16 +37,16 @@ const Header = () => {
     >
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <Shield className="h-8 w-8 text-blue-400" />
             <span className="text-xl font-bold text-white">
               LinkShield
             </span>
-          </div>
+          </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
             <Link to="/home" className="text-gray-200 hover:text-white transition-colors">Try it now!</Link>
-            <a href="#" className="text-gray-200 hover:text-white transition-colors">About</a>
+            <a href="" className="text-gray-200 hover:text-white transition-colors">About</a>
             {!token && (
               <div className='flex gap-2'>
                 <Link to="/signup" className="bg-white border-1 hover:bg-black hover:text-white text-black px-4 py-2 rounded-lg transition-colors">

@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <section className="min-h-screen pt-32 pb-20 px-4 relative overflow-hidden">
       <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_center,rgba(0,102,255,0.1),transparent_50%)]" />
-
+      
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-10">
           <div>
@@ -16,12 +16,12 @@ const Hero = () => {
                 <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2 animate-pulse" />
                 Secure file sharing reimagined
               </div>
-
+              
               <h1 className="text-6xl font-bold tracking-tight">
                 Share with
                 <span className="bg-gradient-to-r from-white via-accent to-white bg-clip-text text-transparent"> confidence</span>
               </h1>
-
+              
               <p className="text-lg text-white/60 max-w-xl">
                 Experience the future of secure file sharing. Set expiry dates, control access, and track views with military-grade encryption.
               </p>

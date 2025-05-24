@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const UploadSection = ({ onInputChange, onModeChange }) => {
+const UploadSection = ({ onInputChange, onPasswordChange, onModeChange }) => {
   const [mode, setMode] = useState("file");
   const [file, setFile] = useState(null);
 
@@ -53,6 +53,15 @@ const UploadSection = ({ onInputChange, onModeChange }) => {
           Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
         </div>
       )}
+      <div>
+        <input
+          type="text"
+          name="password"
+          placeholder="Enter a password (optional)"
+          onChange={(e) => onPasswordChange(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+      </div>
     </div>
   );
 };

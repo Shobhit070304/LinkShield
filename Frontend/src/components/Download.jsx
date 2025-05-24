@@ -8,11 +8,19 @@ const Download = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("token"); // replace with your actual token retrieval method
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/resource/${id}`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/file/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // replace `token` with your actual token variable
+            },
+          }
+        );
         const item = res.data;
-        console.log("Data fetched:", item);
+        console.log("Fetched data:", item);
 
         if (item.type === "file") {
           setStatus("valid");
@@ -22,6 +30,7 @@ const Download = () => {
         }
       } catch (err) {
         setStatus("expired");
+        console.error("Error fetching data:", err);
       }
     };
 

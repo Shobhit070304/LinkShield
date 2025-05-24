@@ -10,6 +10,7 @@ import Footer from "../components/Layout/Footer";
 
 function Home() {
   const [input, setInput] = useState(null);
+  const [password, setPassword] = useState(null);
   const [expiry, setExpiry] = useState("3600");
   const [link, setLink] = useState("");
   const [inputMode, setInputMode] = useState("file");
@@ -17,6 +18,7 @@ function Home() {
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
+    const token = localStorage.getItem("token");
     setLoading(true);
     setError("");
     setLink("");
@@ -29,12 +31,19 @@ function Home() {
 
       const formData = new FormData();
       formData.append("file", input);
+      formData.append("password", password);
       formData.append("expiry", expiry);
 
       try {
         const res = await axios.post(
           `${import.meta.env.VITE_BASE_URL}/upload/file`,
-          formData
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`, // replace `token` with your actual token variable
+            },
+          }
         );
         setLink(res.data.link);
         toast.success("Link Generated!");
@@ -47,6 +56,8 @@ function Home() {
         setLoading(false);
         return setError("Please enter a valid URL.");
       }
+      const formData = new FormData();
+      formData.append("password", password);
 
       try {
         const res = await axios.post(
@@ -54,6 +65,11 @@ function Home() {
           {
             link: input,
             expiry,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // replace `token` with your actual token variable
+            },
           }
         );
         setLink(res.data.link);
@@ -71,10 +87,67 @@ function Home() {
     navigator.clipboard.writeText(link);
     toast.success("Link copied to clipboard!");
   };
+
+  // Function to handle redirection
+  const handleRedirect = async () => {
+    if (!link) return;
+
+    const token = localStorage.getItem("token");
+    const id = link.split("/")[4];
+
+    try {
+      // First check if it's protected
+      const res = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/resource/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Request aa gayi");
+      console.log(res.data.isProtected);
+
+      if (res.data.isProtected) {
+        const password = prompt("Enter the password to access the link:");
+        if (!password) {
+          toast.error("Password is required to access this link.");
+          return;
+        }
+
+        // Try again with password
+        try {
+          const resWithPassword = await axios.get(
+            `${import.meta.env.VITE_BASE_URL}/file/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              params: { password },
+            }
+          );
+
+          window.open(link, "_blank"); // ✅ Finally open the link
+        } catch (err) {
+          if (err.response && err.response.status === 403) {
+            toast.error("Incorrect password. Please try again.");
+          } else {
+            toast.error("Something went wrong.");
+          }
+        }
+      } else {
+        // No protection, open directly
+        window.open(link, "_blank");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Server Error");
+    }
+  };
+
   return (
     <>
-      <div className="bg-black text-white min-h-screen flex items-center justify-center">
-        <Header />
+      <Header />
+      <div className="bg-black text-white min-h-screen pt-32 flex-col items-center justify-center">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <motion.div
@@ -102,6 +175,7 @@ function Home() {
                 </h3>
                 <UploadSection
                   onInputChange={setInput}
+                  onPasswordChange={setPassword}
                   onModeChange={setInputMode}
                 />
               </motion.div>
@@ -148,9 +222,8 @@ function Home() {
               </p>
               <div className="bg-gray-900 rounded-lg p-4 mb-6">
                 <a
-                  href={link}
-                  target="_blank"
                   rel="noopener noreferrer"
+                  onClick={handleRedirect}
                   className="text-blue-400 text-lg underline break-words"
                 >
                   {link}
